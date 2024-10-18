@@ -19,12 +19,12 @@ import { AuthModule } from './auth/auth.module';
       inject: [ConfigService],
       useFactory: async (configService: ConfigService) => {
         const uri = configService.get<string>('DATABASE_URL');
-        console.log('Connecting to MongoDB with URI:', uri); // Add this debug log
         return {
           uri,
         };
       },
     }),
+
     UserModule,
     SurveyModule,
     QuestionModule,
