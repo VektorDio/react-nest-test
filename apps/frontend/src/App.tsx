@@ -23,9 +23,6 @@ export default function App() {
 
     const checkAuth = async () => {
         const token = getTokenFromLocalStorage();
-
-        console.log(token)
-
         if (token) {
             try {
                 const data = await AuthService.getMe();
