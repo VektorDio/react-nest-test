@@ -29,8 +29,12 @@ export const AuthService = {
         removeTokenFromLocalStorage()
     },
     async getMe() {
-        return (await instance.get('user', {
-            headers: { Authorization: `Bearer ${getTokenFromLocalStorage() || ''}` },
-        })).data
+        try {
+            return (await instance.get('user', {
+                headers: { Authorization: `Bearer ${getTokenFromLocalStorage() || ''}` },
+            })).data
+        } catch (error) {
+            console.log(error)
+        }
     }
 }

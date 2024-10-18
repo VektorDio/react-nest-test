@@ -22,14 +22,10 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(true);
 
     const checkAuth = async () => {
-        console.log("test")
-        try {
-            getTokenFromLocalStorage();
-        } catch (error) {
-            console.log(error)
-        }
-
         const token = getTokenFromLocalStorage();
+
+        console.log(token)
+
         if (token) {
             try {
                 const data = await AuthService.getMe();
