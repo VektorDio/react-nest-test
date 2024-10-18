@@ -2,14 +2,18 @@
   "version": 2,
   "builds": [
     {
-      "src": "dist/main.js",
+      "src": "/apps/backend/src/main.js",
       "use": "@vercel/node"
+    },
+    {
+      "src": "/apps/frontend/dist/*",
+      "use": "@now/static"
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "dist/main.js",
+      "dest": "/apps/backend/src/main.js",
       "methods": ["GET", "POST", "PUT", "PATCH", "DELETE", "HEAD", "OPTIONS"]
     }
   ]
