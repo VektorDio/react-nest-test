@@ -24,7 +24,7 @@ export default function App() {
     const checkAuth = async () => {
         console.log("test")
         try {
-            const text = getTokenFromLocalStorage()
+            getTokenFromLocalStorage();
         } catch (error) {
             console.log(error)
         }
