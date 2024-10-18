@@ -22,6 +22,13 @@ export default function App() {
     const [isLoading, setIsLoading] = useState(true);
 
     const checkAuth = async () => {
+        console.log("test")
+        try {
+            const text = getTokenFromLocalStorage()
+        } catch (error) {
+            console.log(error)
+        }
+
         const token = getTokenFromLocalStorage();
         if (token) {
             try {
