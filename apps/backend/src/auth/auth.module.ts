@@ -10,8 +10,8 @@ import 'dotenv/config';
     UserModule,
     JwtModule.register({
       global: true,
-      //secret: process.env.JWT_SECRET,
-      secret: 'b183dc59b620c16c88b38fb3c2b80688',
+      secret: process.env.JWT_SECRET,
+      // secret: 'b183dc59b620c16c88b38fb3c2b80688',
       signOptions: { expiresIn: '60000s' },
     }),
   ],
