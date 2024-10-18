@@ -10,7 +10,7 @@ export const AuthService = {
     async login(userData: IUserData): Promise<IUser | undefined> {
         let data: IResponseUserData
 
-        console.log(process.env.API_URL)
+        console.log(import.meta.env.API_URL)
 
         try {
             data = (await instance.post('auth/login', userData, {
