@@ -4,10 +4,6 @@
     {
       "src": "/src/main.ts",
       "use": "@vercel/node"
-    },
-    {
-      "src": "/dist/*",
-      "use": "@now/static"
     }
   ],
   "routes": [
