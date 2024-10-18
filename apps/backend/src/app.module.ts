@@ -15,7 +15,7 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
     }),
     //MongooseModule.forRoot(process.env.DATABASE_URL),
-    MongooseModule.forRoot('mongodb+srv:// vektordiod:1SjJkgYckdgbwhlR@nest-test. u2p1v. mongodb. net/?retryWrites=true&w=majority&appName=nest-test'),
+    MongooseModule.forRoot('mongodb+srv://vektordiod:1SjJkgYckdgbwhlR@nest-test.u2p1v.mongodb.net/?retryWrites=true&w=majority&appName=nest-test'),
     UserModule,
     SurveyModule,
     QuestionModule,
