@@ -10,7 +10,7 @@ export const AuthService = {
     async login(userData: IUserData): Promise<IUser | undefined> {
         let data: IResponseUserData
 
-        console.log('login')
+        console.log(process.env.API_URL)
 
         try {
             data = (await instance.post('auth/login', userData, {
@@ -28,11 +28,9 @@ export const AuthService = {
         return data.user
     },
     async logout() {
-        console.log('logout')
         removeTokenFromLocalStorage()
     },
     async getMe() {
-        console.log('getme')
         return (await instance.get('user', {
             headers: { Authorization: `Bearer ${getTokenFromLocalStorage() || ''}` },
         })).data
