@@ -28,7 +28,7 @@ export class SurveyService {
   }
 
   async getSurveyById(userId: string, surveyId: string) {
-    const user = await this.userModel.findById(userId)
+    const user = await this.userModel.findById(userId);
     const survey = await this.surveyModel
       .findById(surveyId)
       .populate('questions')
@@ -40,9 +40,7 @@ export class SurveyService {
 
     // @ts-ignore
     if (user.completedSurveys.includes(surveyId)) {
-      throw new UnauthorizedException(
-        'You already completed this survey',
-      );
+      throw new UnauthorizedException('You already completed this survey');
     }
 
     return survey;

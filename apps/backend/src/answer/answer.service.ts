@@ -13,8 +13,11 @@ export class AnswerService {
   ) {}
 
   async createAnswer(createAnswerDto: CreateAnswerDto) {
-    const userId = createAnswerDto.user
-    await this.userModel.updateOne({ _id: userId }, { $push: { completedSurveys: createAnswerDto.survey } })
+    const userId = createAnswerDto.user;
+    await this.userModel.updateOne(
+      { _id: userId },
+      { $push: { completedSurveys: createAnswerDto.survey } },
+    );
     return this.answerModel.create(createAnswerDto);
   }
 }
