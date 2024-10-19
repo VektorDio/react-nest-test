@@ -18,8 +18,8 @@ export const counterSlice = createSlice({
     name: 'surveys',
     initialState,
     reducers: {
-        setSurveys: (state, action) => {
-            state.surveys = action.payload
+        pushSurvey: (state, action) => {
+            state.surveys.push(action.payload)
         },
         setAnswers: (state, action) => {
             state.answers = action.payload
@@ -27,9 +27,9 @@ export const counterSlice = createSlice({
     },
 })
 
-export const { setSurveys, setAnswers } = counterSlice.actions
+export const { pushSurvey, setAnswers } = counterSlice.actions
 
 // Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.surveys
+export const selectSurvey = (state: RootState) => state.surveys
 
 export default counterSlice.reducer
