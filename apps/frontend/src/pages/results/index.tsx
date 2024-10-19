@@ -2,7 +2,7 @@ import { useState, useEffect, useCallback } from 'react'
 import { Container, Typography, Button, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper, Box, CircularProgress } from '@mui/material'
 import { useAppDispatch, useAppSelector } from '../../store/hooks'
 import { RootState, AppDispatch } from '../../store/store'
-import { setSurveys, setAnswers } from '../../store/surveys/surveys.slice'
+import { setAnswers } from '../../store/surveys/surveys.slice';
 import { ISurvey, ISurveyList, IAnswer } from '../../types/types'
 import { SurveyService } from '../../service/survey.service'
 import { toast, ToastContainer } from 'react-toastify'
@@ -10,7 +10,9 @@ import 'react-toastify/dist/ReactToastify.css'
 
 function ResultsPage() {
     const dispatch = useAppDispatch<AppDispatch>()
-    const { surveys, answers } = useAppSelector((state: RootState) => state.surveys)
+    const { answers } = useAppSelector((state: RootState) => state.surveys)
+
+    const [surveySummaries, setSurveySummaries] = useState<ISurveyList[]>([]);
     const [selectedSurvey, setSelectedSurvey] = useState<ISurvey | null>(null)
     const [loading, setLoading] = useState<boolean>(false)
 
@@ -18,8 +20,8 @@ function ResultsPage() {
         const fetchSurveys = async () => {
             setLoading(true)
             try {
-                const surveyList = await SurveyService.getSurveyIdsAndNames()
-                dispatch(setSurveys(surveyList))
+                const surveysList = await SurveyService.getSurveyIdsAndNames()
+                setSurveySummaries(surveysList);
             } catch (error) {
                 toast.error('Failed to fetch surveys. Please try again.')
             } finally {
@@ -27,10 +29,10 @@ function ResultsPage() {
             }
         }
 
-        if (!surveys || surveys.length === 0) {
+        if (!surveySummaries || surveySummaries.length === 0) {
             fetchSurveys()
         }
-    }, [dispatch, surveys])
+    }, [surveySummaries])
 
     const handleSurveySelect = useCallback(async (survey: ISurveyList) => {
         setLoading(true)
@@ -38,6 +40,7 @@ function ResultsPage() {
             const fullSurvey = await SurveyService.getSurveyById(survey._id)
             setSelectedSurvey(fullSurvey)
             const surveyResults = await SurveyService.getSurveyAnswersById(survey._id)
+
             dispatch(setAnswers(surveyResults))
         } catch (error) {
             toast.error('Failed to fetch survey results. Please try again.')
@@ -45,7 +48,7 @@ function ResultsPage() {
         } finally {
             setLoading(false)
         }
-    }, [dispatch])
+    }, [answers, dispatch])
 
     if (loading) {
         return (
@@ -62,7 +65,7 @@ function ResultsPage() {
             </Typography>
             {!selectedSurvey ? (
                 <Box display="flex" flexWrap="wrap" justifyContent="center" gap={2} mt={3}>
-                    {surveys.map((survey) => (
+                    {surveySummaries.map((survey) => (
                         <Button
                             key={survey._id}
                             variant="contained"
@@ -76,33 +79,43 @@ function ResultsPage() {
                 </Box>
             ) : (
                 <>
-                    <Typography variant="h5" gutterBottom textAlign="center" mt={3}>
+                    <Typography variant="h4" gutterBottom textAlign="center" mt={3}>
                         {selectedSurvey.name} Results
                     </Typography>
-                    <TableContainer component={Paper} sx={{ mt: 4 }}>
-                        <Table>
-                            <TableHead>
-                                <TableRow>
-                                    <TableCell>User</TableCell>
-                                    {selectedSurvey.questions.map((question, index) => (
-                                        <TableCell key={question._id}>Question {index + 1}</TableCell>
-                                    ))}
-                                </TableRow>
-                            </TableHead>
-                            <TableBody>
-                                {answers.map((answer: IAnswer) => (
-                                    <TableRow key={answer._id}>
-                                        <TableCell>{answer.user.email}</TableCell>
-                                        {selectedSurvey.questions.map((question) => (
-                                            <TableCell key={question._id}>
-                                                {answer.responses.find((r) => r.question._id === question._id)?.answer || 'N/A'}
-                                            </TableCell>
-                                        ))}
-                                    </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
-                    </TableContainer>
+                    {
+                        answers.length > 0 ? (
+                          <TableContainer component={Paper} sx={{ mt: 4 }}>
+                              <Table>
+                                  <TableHead>
+                                      <TableRow>
+                                          <TableCell>User</TableCell>
+                                          {selectedSurvey.questions.map((question, index) => (
+                                            <TableCell key={question._id}>Question {index + 1}</TableCell>
+                                          ))}
+                                      </TableRow>
+                                  </TableHead>
+                                  <TableBody>
+                                      {
+                                          answers.map((answer: IAnswer) => (
+                                            <TableRow key={answer._id}>
+                                                <TableCell>{answer.user.email}</TableCell>
+                                                {selectedSurvey.questions.map((question) => (
+                                                  <TableCell key={question._id}>
+                                                      {answer.responses.find((r) => r.question._id === question._id)?.answer || 'N/A'}
+                                                  </TableCell>
+                                                ))}
+                                            </TableRow>
+                                          ))
+                                      }
+                                  </TableBody>
+                              </Table>
+                          </TableContainer>
+                          ) : (
+                              <Typography variant="h6" gutterBottom textAlign="center">
+                                  No results yet
+                              </Typography>
+                        )
+                    }
                     <Box display="flex" justifyContent="center" mt={4}>
                         <Button
                             variant="contained"
