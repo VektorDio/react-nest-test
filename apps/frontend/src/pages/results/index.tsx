@@ -8,7 +8,7 @@ import { SurveyService } from '../../service/survey.service'
 import { toast, ToastContainer } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 
-export default function ResultsPage(): JSX.Element {
+function ResultsPage() {
     const dispatch = useAppDispatch<AppDispatch>()
     const { surveys, answers } = useAppSelector((state: RootState) => state.surveys)
     const [selectedSurvey, setSelectedSurvey] = useState<ISurvey | null>(null)
@@ -27,10 +27,10 @@ export default function ResultsPage(): JSX.Element {
             }
         }
 
-        if (surveys.length === 0) {
+        if (!surveys || surveys.length === 0) {
             fetchSurveys()
         }
-    }, [dispatch, surveys.length])
+    }, [dispatch, surveys])
 
     const handleSurveySelect = useCallback(async (survey: ISurveyList) => {
         setLoading(true)
@@ -119,3 +119,5 @@ export default function ResultsPage(): JSX.Element {
         </Container>
     )
 }
+
+export default ResultsPage

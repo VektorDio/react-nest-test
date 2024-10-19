@@ -15,7 +15,6 @@ export const AuthService = {
                 headers: { Authorization: `Bearer ${getTokenFromLocalStorage() || ''}` },
             })).data
         } catch (error) {
-            console.log(error)
             throw error
         }
 
